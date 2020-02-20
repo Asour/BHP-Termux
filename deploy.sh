@@ -45,11 +45,27 @@ updIns() {
 
     echo
     echo "正在安装 Composer..."
+    EXPECTED_CHECKSUM="$(curl https://composer.github.io/installer.sig)"
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    php -r "if (hash_file('sha384', 'composer-setup.php') === 'c5b9b6d368201a9db6f74e2611495f369991b72d9c8cbd3ffbc63edff210eb73d46ffbfce88669ad33695ef77dc76976') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-    php composer-setup.php
-    php -r "unlink('composer-setup.php');"
-    mv composer.phar $PREFIX/bin/composer
+    ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
+
+    if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]
+    then
+        >&2 echo '错误: Composer 安装包哈希值不匹配'
+        rm composer-setup.php
+        exit 1
+    fi
+
+    php composer-setup.php --quiet
+    RESULT=$?
+    rm composer-setup.php
+    if [ $RESULT == 0 ]; then
+        mv composer.phar $PREFIX/bin/composer
+        echo "Composer 安装完毕"
+    else
+        echo "Composer 安装失败"
+        exit $RESULT
+    fi
 }
 
 # Install BHP
