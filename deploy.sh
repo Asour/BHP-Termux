@@ -37,6 +37,11 @@ backupConf() {
 # Update & Install Pre-required
 updIns() {
     echo
+    echo "正在更换 TUNA 镜像源..."
+    sed -i 's@^\(deb.*stable main\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/termux-packages-24 stable main@' $PREFIX/etc/apt/sources.list
+    sed -i 's@^\(deb.*games stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/game-packages-24 games stable@' $PREFIX/etc/apt/sources.list.d/game.list
+    sed -i 's@^\(deb.*science stable\)$@#\1\ndeb https://mirrors.tuna.tsinghua.edu.cn/termux/science-packages-24 science stable@' $PREFIX/etc/apt/sources.list.d/science.list
+    echo
     echo "正在升级 Termux 内部程序..."
     yes | pkg update
     echo
@@ -45,17 +50,7 @@ updIns() {
 
     echo
     echo "正在安装 Composer..."
-    EXPECTED_CHECKSUM="$(curl https://composer.github.io/installer.sig)"
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
-
-    if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]
-    then
-        >&2 echo '错误: Composer 安装包哈希值不匹配'
-        rm composer-setup.php
-        exit 1
-    fi
-
     php composer-setup.php --quiet
     RESULT=$?
     rm composer-setup.php
@@ -77,6 +72,9 @@ bhpIns() {
     fi
     git clone https://github.com/lkeme/BiliHelper-personal.git bhp
     cd bhp
+    rm composer.lock
+    composer config repo.packagist composer https://mirrors.aliyun.com/composer/
+    composer clearcache
     composer install
     if [ ! -d $BHP_CONF_PATH ]; then
         mkdir -p $BHP_CONF_PATH
