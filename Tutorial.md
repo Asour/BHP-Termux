@@ -28,7 +28,7 @@
 
 1. 打开页面 [Termux](https://f-droid.org/packages/com.termux/)
 
-   *注: 最新版本 0.88, 支持 Android 7.0 以上系统*
+   *注: 最新版本 0.92, 支持 Android 7.0 以上系统*
 
 1. 在页面点击蓝色 **Download APK** 开始下载 Termux
 
@@ -49,6 +49,8 @@
 1. 打开页面 [BHP-Termux Releases](https://github.com/0x012FA733/BHP-Termux/releases)
 
 1. 下载最新版本 Zip 压缩包
+
+   *注: 版本号带 cn 的为国内镜像版 (仅支持 Android 7.0 以上系统)*
 
 1. 打开压缩包, 复制文件夹内 `deploy.sh` 和 `start.sh` 到手机储存根目录
 
@@ -94,7 +96,7 @@
 
 #### 账户设置
 
-- `APP_USER` 用户名(必需), 填入你的用户名, 建议前后各加上一个双引号
+- `APP_USER` 账号(必需), 填入你的账号, 建议前后各加上一个双引号
 
 - `APP_PASS` 密码(必需), 填入你的密码, 建议前后各加上一个双引号
 
