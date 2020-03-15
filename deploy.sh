@@ -50,17 +50,9 @@ updIns() {
 
     echo
     echo "正在安装 Composer..."
-    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-    php composer-setup.php --quiet
-    RESULT=$?
-    rm composer-setup.php
-    if [ $RESULT == 0 ]; then
-        mv composer.phar $PREFIX/bin/composer
-        echo "Composer 安装完毕"
-    else
-        echo "Composer 安装失败"
-        exit $RESULT
-    fi
+    curl -s https://api.github.com/repos/composer/composer/releases/latest | grep -oP '"browser_download_url": "\K(.*)(?=")' | xargs curl -sL -o $PREFIX/bin/composer
+    chmod +x $PREFIX/bin/composer
+    echo "Composer 安装完毕"
 }
 
 # Install BHP
