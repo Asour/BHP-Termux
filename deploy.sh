@@ -50,7 +50,7 @@ updIns() {
 
     echo
     echo "正在安装 Composer..."
-    curl -s https://api.github.com/repos/composer/composer/releases/latest | grep -oP '"browser_download_url": "\K(.*)(?=")' | xargs curl -sL -o $PREFIX/bin/composer
+    curl -o $PREFIX/bin/composer https://raw.githubusercontent.com/0x012FA733/BHP-Termux/composer/composer/latest/composer
     chmod +x $PREFIX/bin/composer
     echo "Composer 安装完毕"
 }
