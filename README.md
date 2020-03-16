@@ -2,6 +2,8 @@
 
 让 BiliHelper 运行在 Android 上吧!
 
+![Composer 备份状态](https://github.com/0x012FA733/BHP-Termux/workflows/.github/workflows/composer.yml/badge.svg)
+
 ## 交流
 
 Group: [55308141](https://jq.qq.com/?_wv=1027&k=5AIDaJg)

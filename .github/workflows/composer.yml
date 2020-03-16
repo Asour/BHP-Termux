@@ -1,0 +1,36 @@
+on:
+  schedule:
+    - cron: '0 18 * * *'
+
+jobs:
+  composer:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Prepare branch and folders
+        run: |
+          git fetch --no-tags --prune --depth=1 origin +refs/heads/*:refs/remotes/origin/*
+          git checkout composer 2>/dev/null || git checkout -b composer
+          if [ ! -d composer ]; then mkdir composer; fi
+          if [ ! -d composer/latest ]; then mkdir -p composer/latest; fi
+
+      - name: Get the latest composer and commit files
+        run: |
+          COMPOSER_VER=$(curl -s https://api.github.com/repos/composer/composer/releases/latest | grep -oP '"tag_name": "\K(.*)(?=")')
+          if [ ! -f composer/composer-${COMPOSER_VER} ]; then \
+            COMPOSER_URL=https://github.com/composer/composer/releases/download/${COMPOSER_VER}/composer.phar && \
+            curl -sL -o composer/latest/composer ${COMPOSER_URL} && \
+            cp composer/latest/composer composer/composer-${COMPOSER_VER} && \
+            git config --local user.email "actions@github.com" && \
+            git config --local user.name "GitHub Actions" && \
+            git add -A && \
+            git commit -m "Update composer to version ${COMPOSER_VER}"; fi
+
+      - name: Force push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_ACTIONS }}
+          branch: 'composer'
+          force: true
