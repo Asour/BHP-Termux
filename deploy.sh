@@ -50,7 +50,7 @@ updIns() {
 
     echo
     echo "正在安装 Composer..."
-    curl -o $PREFIX/bin/composer https://raw.githubusercontent.com/0x012FA733/BHP-Termux/composer/composer/latest/composer
+    curl -o $PREFIX/bin/composer https://mirrors.aliyun.com/composer/composer.phar
     chmod +x $PREFIX/bin/composer
     echo "Composer 安装完毕"
 }
